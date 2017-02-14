@@ -1,0 +1,20 @@
+{
+    "name": "baytek/laravel-menu",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Yvon Viger",
+            "email": "yvon@baytek.ca"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Baytek\\Laravel\\Menu\\": "src/"
+        }
+    },
+    "require": {
+        "php": ">=5.6.4"
+    },
+    "minimum-stability": "dev"
+}
