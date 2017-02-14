@@ -9,6 +9,9 @@
         }
     ],
     "autoload": {
+        "class": {
+            "Baytek\\Laravel\\Menu": "src/Menu.php"
+        },
         "psr-4": {
             "Baytek\\Laravel\\Menu\\": "src/"
         }

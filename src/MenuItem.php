@@ -13,7 +13,7 @@ class MenuItem
 	protected $form;
 	protected $location = '';
 	protected $method = 'get';
-	protected $model = '';
+	protected $model = null;
 	protected $prepend;
 	protected $text;
 	protected $type = 'url';
@@ -66,7 +66,7 @@ class MenuItem
 
 		return sprintf('<a href="%2$s"%3$s%4$s>%5$s</a>%6$s',
 		    $this->class ? null: " class=\"action$this->class\"",
-		    starts_with($this->location, '#') ? $this->location : call_user_func($this->type, $this->location, $this->model),
+		    starts_with($this->location, '#') ? $this->location : call_user_func_array($this->type, array_filter([$this->location, $this->model])),
 		    (strtolower($this->method) == 'get') ? null : " data-form-id='$this->uniqid'",
 		    ($isConfirmation ? " data-confirm=\"{$confirm}\"" : ""),
 		    $this->prepend . $this->text . $this->append,

@@ -3,6 +3,7 @@
 namespace Baytek\Laravel\Menu;
 
 use Illuminate\Support\ServiceProvider;
+use Blade;
 
 class MenuServiceProvider extends ServiceProvider
 {
@@ -16,9 +17,17 @@ class MenuServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->loadRoutesFrom(__DIR__.'/Routes.php');
+        // $this->loadRoutesFrom(__DIR__.'/Routes.php');
         $this->loadMigrationsFrom(__DIR__.'/../resources/Migrations');
         $this->loadViewsFrom(__DIR__.'/../resources/Views', 'Content');
+
+        Blade::directive('link', function ($expression) {
+            return "<?php echo new \Baytek\Laravel\Menu\MenuItem($expression); ?>";
+        });
+
+        Blade::directive('button', function ($expression) {
+            return "<?php echo new \Baytek\Laravel\Menu\MenuItem($expression); ?>";
+        });
     }
 
     /**
