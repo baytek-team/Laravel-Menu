@@ -4,6 +4,8 @@ namespace Baytek\Laravel\Menu;
 
 use Illuminate\Database\Eloquent\Collection;
 
+use Request;
+
 /*
     The menu class needs to accomplish the following.
     * Needs to be open, and easy to manipulate insert items at any index, remove items, reorder items
@@ -14,54 +16,96 @@ use Illuminate\Database\Eloquent\Collection;
     Sample:
 
     $menu = new Menu;
-    $menu->append($menu->button('test', [
+    (new Menu)->push($menu->button('test', [
         'action' => 'Controller@index'
     ]));
  */
 
 class Menu extends Collection
 {
-    function __construct($text = null)
+    use NodeTrait;
+
+    protected $wrapper = 'div';
+    protected $prepend = '';
+    protected $append = '';
+    protected $before = '';
+    protected $after = '';
+
+    function __construct(array $value = [], array $properties = [])
     {
-        parent::__construct();
+        parent::__construct($value);
+
+        foreach($properties as $property => $value) {
+            if(property_exists($this, $property)) {
+                $this->$property = $value;
+            }
+        }
     }
 
     /**
      * Create an anchor menu item
      * @param  string $text             Link text
      * @param  array  $properties       List of properties of the link
-     * @return \Baytek\Menu\MenuItem    MenuItem Object
+     * @return \Baytek\Menu\Item        Item Object
      */
     public static function anchor($text, array $properties = [])
     {
-        return new MenuItem($text, $properties);
+        return new Anchor($text, $properties);
     }
 
     /**
      * Create an button menu item
      * @param  string $text             Button text
      * @param  array  $properties       List of properties of the link
-     * @return \Baytek\Menu\MenuItem    MenuItem Object
+     * @return \Baytek\Menu\Item        Item Object
      */
     public static function button($text, array $properties = [])
     {
-        return new MenuItem($text, $properties);
+        return new Button($text, $properties);
+    }
+
+    /**
+     * Create an link menu item
+     * @param  string $text             Link text
+     * @param  array  $properties       List of properties of the link
+     * @return \Baytek\Menu\Item        Item Object
+     */
+    public static function link($text, array $properties = [])
+    {
+        return new Link($text, $properties);
     }
 
     /**
      * Render the collection of Menu Items to an HTML list
-     * @param  string $wrapItems HTML node name to wrap the menu items
-     * @param  string $wrapMenu  HTML node name to wrap the menu
      * @return string            HTML markup list
      */
-    public function toNav($wrapItems = 'li', $wrapMenu = 'ol')
+    public function toNav()
     {
-        $menu = collect($this)->map(function($link) use ($wrapItems)
+        // Request::getPathInfo()
+        $menu = $this->map(function($link)
         {
-            return "<$wrapItems>$link</s$wrapItems>";
+            return (string)$link;
+            // return sprintf('<%1$s class="%2$s">%3$s</%1$s>',
+            //     $this->itemWrapper,
+            //     $link->getLocation() == Request::url() ? 'active item': 'item',
+            //     (string)$link
+            // );
         })->implode('');
 
-        return "<$wrapMenu>$menu</$wrapMenu>";
+
+
+
+        return sprintf('%1$s<%2$s%3$s>%4$s%5$s%6$s</%2$s>%7$s',
+            $this->prepend ?: null,
+            $this->wrapper,
+            $this->getAttributes(),
+            $this->before ?: null,
+            $menu,
+            $this->after ?: null,
+            $this->append ?: null
+        );
+        // $class = $this->class ? " class=\"$this->class\"" : '';
+        // return "$this->prepend<$this->menuWrapper$class>$menu</$this->menuWrapper>$this->append";
     }
 
     /**

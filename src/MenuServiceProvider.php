@@ -21,12 +21,34 @@ class MenuServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(__DIR__.'/../resources/Migrations');
         $this->loadViewsFrom(__DIR__.'/../resources/Views', 'Content');
 
-        Blade::directive('link', function ($expression) {
-            return "<?php echo new \Baytek\Laravel\Menu\MenuItem($expression); ?>";
+        Blade::directive('anchor', function ($expression)
+        {
+            $anchor = "new \Baytek\Laravel\Menu\Anchor($expression)";
+            return "<?php if (isset(\$__menu)): \$__menu[] = $anchor; else: echo $anchor; endif;?>";
         });
 
-        Blade::directive('button', function ($expression) {
-            return "<?php echo new \Baytek\Laravel\Menu\MenuItem($expression); ?>";
+        Blade::directive('button', function ($expression)
+        {
+            $button = "new \Baytek\Laravel\Menu\Button($expression)";
+            return "<?php if (isset(\$__menu)): \$__menu[] = $button; else: echo $button; endif;?>";
+        });
+
+        Blade::directive('link', function ($expression)
+        {
+            $link = "new \Baytek\Laravel\Menu\Link($expression)";
+            return "<?php if (isset(\$__menu)): \$__menu[] = $link; else: echo $link; endif;?>";
+        });
+
+        Blade::extend(function($value)
+        {
+            return preg_replace(
+                // Expression
+                '/(.*?)@menu(\((.*?)\))?(.*?)@endmenu?(.*?)/s',
+                // Replacement
+                '$1 <?php $__menu = [];$__menuParams = array_collapse([$3]);?> $4<?php echo new \Baytek\Laravel\Menu\Menu($__menu, $__menuParams); unset($__menu);?>$5',
+                // Value
+                $value
+            );
         });
     }
 
@@ -37,12 +59,24 @@ class MenuServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(Menu::class, function ($app) {
-            return new Menu(config('cms.menu'));
+        $this->app->bind(Menu::class, function ($app)
+        {
+            return new Menu();
         });
 
-        $this->app->bind(MenuItem::class, function ($app) {
-            return new MenuItem(config('cms.menu'));
+        $this->app->bind(Anchor::class, function ($app)
+        {
+            return new Anchor();
+        });
+
+        $this->app->bind(Button::class, function ($app)
+        {
+            return new Button();
+        });
+
+        $this->app->bind(Link::class, function ($app)
+        {
+            return new Link();
         });
     }
 
@@ -50,7 +84,9 @@ class MenuServiceProvider extends ServiceProvider
     {
         return [
             Menu::class,
-            MenuItem::class,
+            Anchor::class,
+            Button::class,
+            Link::class,
         ];
     }
 }
