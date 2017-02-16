@@ -3,7 +3,9 @@
 namespace Baytek\Laravel\Menu;
 
 use Illuminate\Support\ServiceProvider;
+
 use Blade;
+use Route;
 
 class MenuServiceProvider extends ServiceProvider
 {
@@ -17,39 +19,24 @@ class MenuServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // $this->loadRoutesFrom(__DIR__.'/Routes.php');
         $this->loadMigrationsFrom(__DIR__.'/../resources/Migrations');
-        $this->loadViewsFrom(__DIR__.'/../resources/Views', 'Content');
+        $this->loadViewsFrom(__DIR__.'/../resources/Views', 'Menu');
 
-        Blade::directive('anchor', function ($expression)
-        {
-            $anchor = "new \Baytek\Laravel\Menu\Anchor($expression)";
-            return "<?php if (isset(\$__menu)): \$__menu[] = $anchor; else: echo $anchor; endif;?>";
-        });
+        // $this->publishes([
+        //     __DIR__.'/../resources/Views' => resource_path('views/vendor/Menu'),
+        // ], 'views');
 
-        Blade::directive('button', function ($expression)
-        {
-            $button = "new \Baytek\Laravel\Menu\Button($expression)";
-            return "<?php if (isset(\$__menu)): \$__menu[] = $button; else: echo $button; endif;?>";
-        });
+        // $this->publishes([
+        //     __DIR__.'/../resources/migrations/' => database_path('migrations')
+        // ], 'migrations');
 
-        Blade::directive('link', function ($expression)
-        {
-            $link = "new \Baytek\Laravel\Menu\Link($expression)";
-            return "<?php if (isset(\$__menu)): \$__menu[] = $link; else: echo $link; endif;?>";
-        });
+        $this->publishes([
+            __DIR__.'/../resources/Config/menus.php' => config_path('menus.php'),
+        ], 'config');
 
-        Blade::extend(function($value)
-        {
-            return preg_replace(
-                // Expression
-                '/(.*?)@menu(\((.*?)\))?(.*?)@endmenu?(.*?)/s',
-                // Replacement
-                '$1 <?php $__menu = [];$__menuParams = array_collapse([$3]);?> $4<?php echo new \Baytek\Laravel\Menu\Menu($__menu, $__menuParams); unset($__menu);?>$5',
-                // Value
-                $value
-            );
-        });
+        $this->bootBladeDirectives();
+
+        $this->bootRoutes();
     }
 
     /**
@@ -88,5 +75,63 @@ class MenuServiceProvider extends ServiceProvider
             Button::class,
             Link::class,
         ];
+    }
+
+
+    public function bootRoutes()
+    {
+        Route::group([
+                'namespace' => \Baytek\Laravel\Menu\Controllers::class,
+                'middleware' => ['web'],
+            ], function ($router)
+            {
+                // Add the default route to the routes list for this provider
+                $router->resource('admin/menu', 'MenuController');
+
+                $router->bind('menu', function($slug)
+                {
+                    // Try to find the page with the slug, this should also check its parents and should also split on /
+                    $menu = Webpage::where('contents.key', $slug)->ofContentType('webpage')->first();
+
+                    // Show the 404 page if not found
+                    if(is_null($menu)) {
+                        abort(404);
+                    }
+                    return $menu;
+                });
+            });
+    }
+
+    public function bootBladeDirectives()
+    {
+        Blade::directive('anchor', function ($expression)
+        {
+            $anchor = "new \Baytek\Laravel\Menu\Anchor($expression)";
+            return "<?php if (isset(\$__menu)): \$__menu[] = $anchor; else: echo $anchor; endif;?>";
+        });
+
+        Blade::directive('button', function ($expression)
+        {
+            $button = "new \Baytek\Laravel\Menu\Button($expression)";
+            return "<?php if (isset(\$__menu)): \$__menu[] = $button; else: echo $button; endif;?>";
+        });
+
+        Blade::directive('link', function ($expression)
+        {
+            $link = "new \Baytek\Laravel\Menu\Link($expression)";
+            return "<?php if (isset(\$__menu)): \$__menu[] = $link; else: echo $link; endif;?>";
+        });
+
+        Blade::extend(function($value)
+        {
+            return preg_replace(
+                // Expression
+                '/(.*?)@menu(\((.*?)\))?(.*?)@endmenu?(.*?)/s',
+                // Replacement
+                '$1 <?php $__menu = [];$__menuParams = [$3];?> $4<?php echo new \Baytek\Laravel\Menu\Menu($__menu, $__menuParams); unset($__menu);?>$5',
+                // Value
+                $value
+            );
+        });
     }
 }

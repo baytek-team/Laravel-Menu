@@ -29,6 +29,13 @@ class Item
 	 */
 	public function __construct($text = '', array $properties = [])
 	{
+		$this->wrapper = config('menus.menu.item.wrapper', 'div');
+        $this->class = config('menus.menu.item.class', '');
+        $this->prepend = config('menus.menu.item.prepend', '');
+        $this->append = config('menus.menu.item.append', '');
+        $this->before = config('menus.menu.item.before', '');
+        $this->after = config('menus.menu.item.after', '');
+
 		$this->text = $text;
 		$this->uniqid = uniqid('frm_');
 
@@ -69,9 +76,6 @@ class Item
 		    $this->class .= ' confirm';
 		    $confirm = $this->confirm ?: 'Are you sure?';
 		}
-
-
-		// PREPEND <a>BEFORE Text AFTER</a> APPEND
 
 		return sprintf('<a%1$s href="%2$s"%3$s%4$s>%5$s</a>%6$s',
 		    " class=\"{$this->getClasses()}\"",

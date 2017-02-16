@@ -25,21 +25,39 @@ class Menu extends Collection
 {
     use NodeTrait;
 
-    protected $wrapper = 'div';
-    protected $prepend = '';
-    protected $append = '';
-    protected $before = '';
-    protected $after = '';
+    private $wrapper = 'div';
+    private $prepend = '';
+    private $append = '';
+    private $before = '';
+    private $after = '';
 
     function __construct(array $value = [], array $properties = [])
     {
         parent::__construct($value);
 
-        foreach($properties as $property => $value) {
-            if(property_exists($this, $property)) {
-                $this->$property = $value;
-            }
+        $this->wrapper = config('menus.menu.wrapper', 'div');
+        $this->class = config('menus.menu.class', '');
+        $this->prepend = config('menus.menu.prepend', '');
+        $this->append = config('menus.menu.append', '');
+        $this->before = config('menus.menu.before', '');
+        $this->after = config('menus.menu.after', '');
+
+        // This is a sort of hack because the way the blade templates are setup.
+        //
+        // I would like to review this code and come up with a better solution.
+        if(count($properties) == 1 && $properties[0]) {
+            $properties = $properties[0];
         }
+
+        collect($properties)->each(function ($value, $property)
+        {
+            if(!property_exists($this, $property)) {
+                throw new Exception("Setting invalid property '$property'");
+            }
+
+            // This could be better using magic setter
+            $this->$property = $value;
+        });
     }
 
     /**
@@ -81,19 +99,10 @@ class Menu extends Collection
      */
     public function toNav()
     {
-        // Request::getPathInfo()
         $menu = $this->map(function($link)
         {
             return (string)$link;
-            // return sprintf('<%1$s class="%2$s">%3$s</%1$s>',
-            //     $this->itemWrapper,
-            //     $link->getLocation() == Request::url() ? 'active item': 'item',
-            //     (string)$link
-            // );
         })->implode('');
-
-
-
 
         return sprintf('%1$s<%2$s%3$s>%4$s%5$s%6$s</%2$s>%7$s',
             $this->prepend ?: null,
