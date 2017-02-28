@@ -44,8 +44,7 @@ class Item
 			$this->location = '#' . str_slug($text);
 		}
 
-		collect($properties)->each(function ($value, $property)
-		{
+		collect($properties)->each(function ($value, $property) {
 			if(!property_exists($this, $property)) {
 				throw new Exception("Setting invalid property '$property'");
 			}
