@@ -27,8 +27,7 @@ trait NodeTrait
 	public function getAttributes()
 	{
 		$attributes = '';
-		collect($this->attributes)->put('class', $this->getClasses())->each(function($value, $attribute) use (&$attributes)
-		{
+		collect($this->attributes)->put('class', $this->getClasses())->each(function ($value, $attribute) use (&$attributes) {
 			$attributes .= " $attribute=\"$value\"";
 		});
 
