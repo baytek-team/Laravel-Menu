@@ -35,12 +35,12 @@ class Menu extends Collection
     {
         parent::__construct($value);
 
-        $this->wrapper = config('menus.menu.wrapper', 'div');
-        $this->class = config('menus.menu.class', '');
-        $this->prepend = config('menus.menu.prepend', '');
-        $this->append = config('menus.menu.append', '');
-        $this->before = config('menus.menu.before', '');
-        $this->after = config('menus.menu.after', '');
+        $this->wrapper = config('menu.wrapper', 'div');
+        $this->class = config('menu.class', '');
+        $this->prepend = config('menu.prepend', '');
+        $this->append = config('menu.append', '');
+        $this->before = config('menu.before', '');
+        $this->after = config('menu.after', '');
 
         // This is a sort of hack because the way the blade templates are setup.
         //

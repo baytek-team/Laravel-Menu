@@ -29,12 +29,12 @@ class Item
 	 */
 	public function __construct($text = '', array $properties = [])
 	{
-		$this->wrapper = config('menus.menu.item.wrapper', 'div');
-        $this->class = config('menus.menu.item.class', '');
-        $this->prepend = config('menus.menu.item.prepend', '');
-        $this->append = config('menus.menu.item.append', '');
-        $this->before = config('menus.menu.item.before', '');
-        $this->after = config('menus.menu.item.after', '');
+		$this->wrapper = config('menu.item.wrapper', 'div');
+        $this->class = config('menu.item.class', '');
+        $this->prepend = config('menu.item.prepend', '');
+        $this->append = config('menu.item.append', '');
+        $this->before = config('menu.item.before', '');
+        $this->after = config('menu.item.after', '');
 
 		$this->text = $text;
 		$this->uniqid = uniqid('frm_');

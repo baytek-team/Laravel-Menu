@@ -31,7 +31,7 @@ class MenuServiceProvider extends ServiceProvider
         // ], 'migrations');
 
         $this->publishes([
-            __DIR__.'/../resources/Config/menus.php' => config_path('menus.php'),
+            __DIR__.'/../resources/Config/menu.php' => config_path('menu.php'),
         ], 'config');
 
         $this->bootBladeDirectives();
