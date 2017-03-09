@@ -16,5 +16,8 @@
     "require": {
         "php": ">=5.6.4"
     },
+    "post-install-cmd": [
+        "php artisan install:menu"
+    ],
     "minimum-stability": "dev"
 }
