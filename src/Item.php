@@ -101,6 +101,30 @@ class Item
 		);
 	}
 
+	/**
+	 * [link description]
+	 * @param  [type] $link [description]
+	 * @return [type]       [description]
+	 */
+	public static function goesTo($link, $model = null)
+	{
+	    if(is_string($link)) {
+	        return $link;
+	    }
+
+	    $redirection = collect($link);
+	    $keys = $redirection->keys();
+
+	    // This checks to see if any of the array keys exist: 'action', 'route' and 'url'
+	    if (!$keys->intersect(['action', 'route', 'url'])->count()) {
+	        throw new Exception('The url is malformed, unable to create a link of type: ' . $keys->implode(', '));
+	    }
+
+	    // If we have one of those keys, return the helper function with the value
+	    return call_user_func($redirection->keys()->first(), $redirection->first(), $model);
+	}
+
+
 	// public function getClasses()
 	// {
 	// 	$classes = $this->class;
