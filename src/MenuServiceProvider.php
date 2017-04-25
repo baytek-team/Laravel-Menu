@@ -13,6 +13,14 @@ class MenuServiceProvider extends ServiceProvider
     protected $defer = true;
 
     /**
+     * List of artisan commands provided by this package
+     * @var Array
+     */
+    protected $commands = [
+        Commands\MenuInstaller::class,
+    ];
+
+    /**
      * Bootstrap the application services.
      *
      * @return void
@@ -37,8 +45,6 @@ class MenuServiceProvider extends ServiceProvider
         $this->bootBladeDirectives();
 
         $this->bootRoutes();
-
-        (new MenuInstaller)->installCommand();
     }
 
     /**
@@ -48,6 +54,8 @@ class MenuServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->commands($this->commands);
+
         $this->app->bind(Menu::class, function ($app) {
 
             return new Menu();

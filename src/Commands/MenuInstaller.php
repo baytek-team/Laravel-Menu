@@ -1,8 +1,8 @@
 <?php
 
-namespace Baytek\Laravel\Menu;
+namespace Baytek\Laravel\Menu\Commands;
 
-use Baytek\Laravel\Content\Installer;
+use Baytek\Laravel\Content\Commands\Installer;
 use Baytek\Laravel\Menu\Seeders\MenuSeeder;
 use Baytek\Laravel\Menu\Models\Menu;
 use Baytek\Laravel\Menu\MenuServiceProvider;
