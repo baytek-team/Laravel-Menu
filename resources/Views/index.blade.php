@@ -2,7 +2,7 @@
 
 @section('page.head.header')
     <h1 class="ui header">
-        <i class="world icon"></i>
+        <i class="sitemap icon"></i>
         <div class="content">
             Menu Management
             <div class="sub header">Manage the menu content type.</div>
@@ -14,7 +14,7 @@
     <div class="ui secondary menu">
     	<div class="right item">
 	        <a class="ui labeled icon button" href="{{ route('menu.create') }}">
-	            <i class="world icon"></i>Add Menu
+	            <i class="sitemap icon"></i>Add Menu
 	        </a>
 	    </div>
     </div>
@@ -37,8 +37,10 @@
 				<td class="collapsing">{{ $menu->key }}</td>
 				<td>{{ $menu->title }}</td>
 				<td class="right aligned collapsing">
-					<a href="{{ route('menu.edit', $menu) }}" class="ui labeled icon button primary"><i class="pencil icon"></i>Edit</a>
-					<a href="{{ route('menu.destroy', $menu) }}" class="ui labeled icon button negative"><i class="delete icon"></i>Delete</a>
+					<div class="ui compact text menu">
+						<a href="{{ route('menu.edit', $menu) }}" class="item"><i class="pencil icon"></i>Edit</a>
+						<a href="{{ route('menu.destroy', $menu) }}" class="item"><i class="delete icon"></i>Delete</a>
+					</div>
 				</td>
 			</tr>
 		@endforeach

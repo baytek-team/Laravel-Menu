@@ -44,10 +44,10 @@ class MenuController extends ContentController
     public function index()
     {
         $this->viewData['index'] = [
-            'menus' => Menu::childrenOf('menu')->get(),
+            'menus' => Menu::ofContentType('menu')->get(),
         ];
 
-        return parent::index();
+        return parent::contentIndex();
     }
 
     /**
@@ -58,10 +58,10 @@ class MenuController extends ContentController
     public function create()
     {
         $this->viewData['create'] = [
-            'parents' => Menu::childrenOf('menu')->get(),
+            'parents' => Menu::ofContentType('menu')->get(),
         ];
 
-        return parent::create();
+        return parent::contentCreate();
     }
 
     /**
@@ -76,7 +76,7 @@ class MenuController extends ContentController
 
         $request->merge(['key' => str_slug($request->title)]);
 
-        $menu = parent::store($request);
+        $menu = parent::contentStore($request);
 
         $menu->saveRelation('parent-id', $request->parent_id);
 
@@ -94,7 +94,9 @@ class MenuController extends ContentController
             'parents' => Menu::childrenOf('menu')->get(),
         ];
 
-        return parent::edit($id);
+        return parent::contentEdit($id);
     }
+
+    public function show($id) { parent::contentShow($id); }
 
 }

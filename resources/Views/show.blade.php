@@ -1,4 +1,5 @@
 @extends('Content::admin')
+
 @section('content')
 <div class="webpage" style="background: {{ config('cms.content.webpage.background') }}">
 	<h1 style="font-size: 48px;">

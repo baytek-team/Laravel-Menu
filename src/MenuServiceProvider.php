@@ -2,15 +2,24 @@
 
 namespace Baytek\Laravel\Menu;
 
-use Illuminate\Support\ServiceProvider;
+use Baytek\Laravel\Content\Models\Content;
+use Illuminate\Foundation\Support\Providers\AuthServiceProvider;
 
 use Blade;
 use Route;
 
-class MenuServiceProvider extends ServiceProvider
+class MenuServiceProvider extends AuthServiceProvider
 {
 
     protected $defer = true;
+
+    /**
+     * List of permission policies used by this package
+     * @var [type]
+     */
+    protected $policies = [
+        Baytek\Laravel\Menu\Models\Menu::class => Baytek\Laravel\Menu\Policies\MenuPolicy::class,
+    ];
 
     /**
      * List of artisan commands provided by this package
@@ -101,12 +110,13 @@ class MenuServiceProvider extends ServiceProvider
                 $router->bind('menu', function ($slug) {
 
                     // Try to find the page with the slug, this should also check its parents and should also split on /
-                    $menu = Webpage::where('contents.key', $slug)->ofContentType('webpage')->first();
+                    $menu = Content::ofContentType('menu')->where('contents.key', $slug)->first();
 
                     // Show the 404 page if not found
                     if (is_null($menu)) {
                         abort(404);
                     }
+
                     return $menu;
                 });
             });
@@ -115,19 +125,16 @@ class MenuServiceProvider extends ServiceProvider
     public function bootBladeDirectives()
     {
         Blade::directive('anchor', function ($expression) {
-
             $anchor = "new \Baytek\Laravel\Menu\Anchor($expression)";
             return "<?php if (isset(\$__menu)): \$__menu[] = $anchor; else: echo $anchor; endif;?>";
         });
 
         Blade::directive('button', function ($expression) {
-
             $button = "new \Baytek\Laravel\Menu\Button($expression)";
             return "<?php if (isset(\$__menu)): \$__menu[] = $button; else: echo $button; endif;?>";
         });
 
         Blade::directive('link', function ($expression) {
-
             $link = "new \Baytek\Laravel\Menu\Link($expression)";
             return "<?php if (isset(\$__menu)): \$__menu[] = $link; else: echo $link; endif;?>";
         });
