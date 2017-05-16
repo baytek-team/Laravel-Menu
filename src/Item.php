@@ -9,6 +9,7 @@ class Item
 {
 	use NodeTrait;
 
+	protected $id;
 	// protected $action = 'url';
 	protected $uniqid;         // Unique ID of the form used
 	protected $append;         // Content to append within the Anchor
@@ -89,6 +90,19 @@ class Item
 	// public static function anchor($text, array $properties = []) {
 	// 	return new static($text, $properties);
 	// }
+
+	/**
+	 * Checks to see if the current location matches the link location
+	 * @return boolean Active link or not
+	 */
+	public function isActive()
+	{
+		if(method_exists($this, 'getLocation') && $this->getLocation() == Request::url()) {
+			return true;
+		}
+
+		return false;
+	}
 
 	public function getLocation()
 	{

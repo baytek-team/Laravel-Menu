@@ -2,8 +2,6 @@
 
 namespace Baytek\Laravel\Menu;
 
-use Request;
-
 trait NodeTrait
 {
 	protected $class = '';
@@ -17,7 +15,7 @@ trait NodeTrait
 			$classes = explode(' ', $classes);
 		}
 
-		if(method_exists($this, 'getLocation') && $this->getLocation() == Request::url()) {
+		if($this->isActive()) {
 			array_push($classes, 'active');
 		}
 
