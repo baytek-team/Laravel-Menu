@@ -13,7 +13,7 @@
 @section('page.head.menu')
     <div class="ui secondary menu">
     	<div class="right item">
-	        <a class="ui labeled icon button" href="{{ route('menu.create') }}">
+	        <a class="ui labeled item" href="{{ route('menu.create') }}">
 	            <i class="sitemap icon"></i>Add Menu
 	        </a>
 	    </div>

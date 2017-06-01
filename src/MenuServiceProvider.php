@@ -151,10 +151,36 @@ class MenuServiceProvider extends AuthServiceProvider
             );
         });
 
+        Blade::extend(function ($value) {
+
+            return preg_replace(
+                // Expression
+                '/(.*?)@ifBreadcrumbs?(.*?)/s',
+                // Replacement
+                '$1 <?php if(is_null(Route::getCurrentRoute()) && count(explode(\'/\', Route::getCurrentRoute()->uri())) == 1): ?> $2',
+                // Value
+                $value
+            );
+        });
+
+        Blade::extend(function ($value) {
+
+            return preg_replace(
+                // Expression
+                '/(.*?)@endBreadcrumbs?(.*?)/s',
+                // Replacement
+                '$1 <?php endif; ?> $2',
+                // Value
+                $value
+            );
+        });
+
         Blade::directive('breadcrumbs', function ($expression) {
 
             return "<?php
                 \$result = '';
+                if(is_null(Route::getCurrentRoute()))
+                    return;
                 \$folders = explode('/', Route::getCurrentRoute()->uri());
                 \$path = '/';
 
