@@ -176,46 +176,7 @@ class MenuServiceProvider extends AuthServiceProvider
         });
 
         Blade::directive('breadcrumbs', function ($expression) {
-
-            return "<?php
-                \$result = '';
-                if(is_null(Route::getCurrentRoute()))
-                    return;
-                \$folders = explode('/', Route::getCurrentRoute()->uri());
-                \$path = '/';
-
-                foreach(\$folders as \$index => \$folder) {
-                    \$name = \$folder;
-                    \$parameters = Route::getCurrentRoute()->parameters();
-                    foreach(\$parameters as \$key => \$value) {
-                        if(\$folder == \"{\" . strtolower(\$key) . \"}\") {
-                            \$content = \Baytek\Laravel\Content\Models\Content::find(\$value);
-                            if(\$content && property_exists(\$content, 'title')) {
-                                \$name = \$content->title;
-                            }
-                            else if(\$content && property_exists(\$content, 'name')) {
-                                \$name = \$content->name;
-                            }
-                            \$folder = \$value;
-                            break;
-                        }
-                    }
-
-                    \$path .= \$folder . '/';
-
-
-                    if(count(\$folders) != \$index + 1) {
-                        echo new \Baytek\Laravel\Menu\Anchor(___(title_case(\$name)), [
-                            'location' => \$path,
-                            'type' => 'url',
-                            'class' => 'section'
-                        ]);
-                        echo \"<div class='divider'> / </div>\";
-                    }
-                    else {
-                        echo \"<div class='active section'>\" . ___(title_case(\$folder)) . \"</div>\";
-                    }
-                }?>";
+            return "<?php echo new \Baytek\Laravel\Menu\Breadcrumbs?>";
         });
 
     }
