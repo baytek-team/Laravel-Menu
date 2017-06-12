@@ -143,6 +143,18 @@ class MenuServiceProvider extends AuthServiceProvider
 
             return preg_replace(
                 // Expression
+                '/(.*?)@clink(\((.*?)\))?(.*?)@endclink?(.*?)/s',
+                // Replacement
+                '$1 <?php ob_start(); ?>$4<?php $__menu_content = ob_get_clean(); echo new \Baytek\Laravel\Menu\Link($__menu_content, $3); unset($__menu_content)?> $5',
+                // Value
+                $value
+            );
+        });
+
+        Blade::extend(function ($value) {
+
+            return preg_replace(
+                // Expression
                 '/(.*?)@menu(\((.*?)\))?(.*?)@endmenu?(.*?)/s',
                 // Replacement
                 '$1 <?php $__menu = [];$__menuParams = [$3];?> $4<?php echo new \Baytek\Laravel\Menu\Menu($__menu, $__menuParams); unset($__menu);?>$5',
