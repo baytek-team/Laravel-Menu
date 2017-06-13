@@ -71,20 +71,27 @@ class Item
 	{
 		$isConfirmation = false;
 
-		if(strtolower($this->method) == 'delete' || !empty($this->confirm)) {
-		    $isConfirmation = true;
-		    $this->class .= ' confirm';
-		    $confirm = $this->confirm ?: 'Are you sure?';
+		try{
+			if(strtolower($this->method) == 'delete' || !empty($this->confirm)) {
+			    $isConfirmation = true;
+			    $this->class .= ' confirm';
+			    $confirm = $this->confirm ?: 'Are you sure?';
+			}
+
+			$result = sprintf('<a%1$s href="%2$s"%3$s%4$s>%5$s</a>%6$s',
+			    " class=\"{$this->getClasses()}\"",
+			    $this->getLocation(),
+			    (strtolower($this->method) == 'get') ? null : " data-form-id='$this->uniqid'",
+			    ($isConfirmation ? " data-confirm=\"{$confirm}\"" : ""),
+			    $this->prepend . $this->text . $this->append,
+			    $this->form
+			);
+		}
+		catch(Exception $e){
+			dd($e);
 		}
 
-		return sprintf('<a%1$s href="%2$s"%3$s%4$s>%5$s</a>%6$s',
-		    " class=\"{$this->getClasses()}\"",
-		    $this->getLocation(),
-		    (strtolower($this->method) == 'get') ? null : " data-form-id='$this->uniqid'",
-		    ($isConfirmation ? " data-confirm=\"{$confirm}\"" : ""),
-		    $this->prepend . $this->text . $this->append,
-		    $this->form
-		);
+		return $result;
 	}
 
 	// public static function anchor($text, array $properties = []) {
