@@ -88,6 +88,7 @@ class Item
 			);
 		}
 		catch(Exception $e){
+			dump($this);
 			dd($e);
 		}
 

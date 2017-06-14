@@ -2,6 +2,7 @@
 
 namespace Baytek\Laravel\Menu\Commands;
 
+use Baytek\Laravel\Content\Models\Content;
 use Baytek\Laravel\Content\Commands\Installer;
 use Baytek\Laravel\Menu\Seeders\MenuSeeder;
 use Baytek\Laravel\Menu\Models\Menu;
@@ -57,6 +58,6 @@ class MenuInstaller extends Installer
             'primary-navigation-menu',
         ];
 
-        return (new $this->model)->whereIn('key', $relevantRecords)->count() === 0;
+        return Content::whereIn('key', $relevantRecords)->count() === 0;
     }
 }
