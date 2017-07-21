@@ -16,7 +16,7 @@
             <form action="{{route('menu.store')}}" method="POST" class="ui form">
                 {{ csrf_field() }}
 
-                @include('Menu::form')
+                @include('menu::form')
 
                 <div class="field actions">
     	            <a class="ui button" href="{{ route('menu.index') }}">Cancel</a>
