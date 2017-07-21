@@ -18,7 +18,7 @@ class MenuServiceProvider extends AuthServiceProvider
      * @var [type]
      */
     protected $policies = [
-        Baytek\Laravel\Menu\Models\Menu::class => Baytek\Laravel\Menu\Policies\MenuPolicy::class,
+        Models\Menu::class => Policies\MenuPolicy::class,
     ];
 
     /**
@@ -36,19 +36,14 @@ class MenuServiceProvider extends AuthServiceProvider
      */
     public function boot()
     {
-        $this->loadMigrationsFrom(__DIR__.'/../resources/Migrations');
-        $this->loadViewsFrom(__DIR__.'/../resources/Views', 'Menu');
-
-        // $this->publishes([
-        //     __DIR__.'/../resources/Views' => resource_path('views/vendor/Menu'),
-        // ], 'views');
-
-        // $this->publishes([
-        //     __DIR__.'/../resources/migrations/' => database_path('migrations')
-        // ], 'migrations');
+        $this->loadViewsFrom(__DIR__.'/../views', 'menu');
 
         $this->publishes([
-            __DIR__.'/../resources/Config/menu.php' => config_path('menu.php'),
+            __DIR__.'/../views' => resource_path('views/vendor/menu'),
+        ], 'views');
+
+        $this->publishes([
+            __DIR__.'/../config/menu.php' => config_path('menu.php'),
         ], 'config');
 
         $this->bootBladeDirectives();
@@ -95,7 +90,6 @@ class MenuServiceProvider extends AuthServiceProvider
             Link::class,
         ];
     }
-
 
     public function bootRoutes()
     {

@@ -1,4 +1,4 @@
-@extends('Content::admin')
+@extends('content::admin')
 
 @section('content')
 <div class="webpage" style="background: {{ config('cms.content.webpage.background') }}">
