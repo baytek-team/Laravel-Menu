@@ -15,6 +15,7 @@ use DB;
 class MenuInstaller extends Installer
 {
     public $name = 'Menu';
+    protected $protected = ['Menu'];
     protected $provider = MenuServiceProvider::class;
     protected $model = Menu::class;
     protected $seeder = MenuSeeder::class;
@@ -40,11 +41,13 @@ class MenuInstaller extends Installer
 
     public function shouldProtect()
     {
-        foreach(['view', 'create', 'update', 'delete'] as $permission) {
+        foreach ($protected as $model) {
+            foreach(['view', 'create', 'update', 'delete'] as $permission) {
 
-            // If the permission exists in any form do not reseed.
-            if(Permission::where('name', title_case($permission.' '.$this->name))->exists()) {
-                return false;
+                // If the permission exists in any form do not reseed.
+                if(Permission::where('name', title_case($permission.' '.$model)->exists()) {
+                    return false;
+                }
             }
         }
 
