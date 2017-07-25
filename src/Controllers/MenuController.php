@@ -33,7 +33,7 @@ class MenuController extends ContentController
         'index' => 'index',
         'create' => 'create',
         'edit' => 'edit',
-        'show' => 'show',
+        'show' => 'index',
     ];
 
     /**
@@ -77,7 +77,6 @@ class MenuController extends ContentController
         $request->merge(['key' => str_slug($request->title)]);
 
         $menu = parent::contentStore($request);
-
         $menu->saveRelation('parent-id', $request->parent_id);
 
         return redirect(route($this->names['singular'].'.show', $menu));
@@ -88,15 +87,22 @@ class MenuController extends ContentController
      *
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Menu $menu)
     {
         $this->viewData['edit'] = [
             'parents' => Menu::childrenOf('menu')->get(),
         ];
 
-        return parent::contentEdit($id);
+        return parent::contentEdit($menu);
     }
 
-    public function show($id) { parent::contentShow($id); }
+    public function show(Menu $menu)
+    {
+        $this->viewData['show'] = [
+            'menus' => Menu::childrenOf($menu)->get(),
+        ];
+
+        return parent::contentShow($menu);
+    }
 
 }

@@ -1,54 +1,50 @@
 @extends('content::admin')
 
-@section('content')
-<div class="webpage" style="background: {{ config('cms.content.webpage.background') }}">
-	<h1 style="font-size: 48px;">
-		{{ $webpage->title }}
-	</h1>
-	<div class="ui hidden divider"></div>
-	<div class="ui hidden divider"></div>
+@section('page.head.header')
+    <h1 class="ui header">
+        <i class="sitemap icon"></i>
+        <div class="content">
+            Menu Management
+            <div class="sub header">Manage the menu content type.</div>
+        </div>
+    </h1>
+@endsection
 
-	{!! $webpage->content !!}
-
-	<div class="ui hidden divider"></div>
-	<div class="ui hidden divider"></div>
-
-	<div class="ui horizontal segments">
-		<div class="ui segments segment">
-		    <div class="ui segment header">
-		        Settings
-		    </div>
-	        <div class="ui segment blue bottom">
-	            @php
-	    			dump(config('cms.content.webpage'));
-	    		@endphp
-	        </div>
-
+@section('page.head.menu')
+    <div class="ui secondary menu">
+    	<div class="right item">
+	        <a class="ui labeled item" href="{{ route('menu.create') }}">
+	            <i class="sitemap icon"></i>Add Menu
+	        </a>
 	    </div>
-	    <div class="ui segments segment">
-		    <div class="ui segment header">
-		        Meta Data
-		    </div>
+    </div>
+@endsection
 
-		    <div class="ui segment orange bottom">
-		        @php
-					dump($webpage->meta);
-				@endphp
-		    </div>
-		</div>
-
-	    <div class="ui segments segment">
-		    <div class="ui segment header">
-		        Revisions
-		    </div>
-
-		    <div class="ui segment green bottom">
-		        @php
-					dump($webpage->revisions);
-				@endphp
-		    </div>
-		</div>
-	</div>
-</div>
-
+@section('content')
+<table class="ui selectable table">
+	<thead>
+		<tr>
+			<th class="center aligned collapsing">ID</th>
+			<th class="center aligned collapsing">Key</th>
+			<th>Title</th>
+			<th class="center aligned collapsing">Actions</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach($children as $menu)
+			<tr>
+				<td class="collapsing">{{ $menu->id }}</td>
+				<td class="collapsing"><a href="{{ route('menu.show', $menu) }}">{{$menu->key}}</a></td>
+				<td>{{ $menu->title }}</td>
+				<td class="right aligned collapsing">
+					<div class="ui compact text menu">
+						<a href="{{ route('menu.item.create', $menu) }}" class="item"><i class="plus icon"></i>Edit</a>
+						<a href="{{ route('menu.edit', $menu) }}" class="item"><i class="pencil icon"></i>Edit</a>
+						<a href="{{ route('menu.destroy', $menu) }}" class="item"><i class="delete icon"></i>Delete</a>
+					</div>
+				</td>
+			</tr>
+		@endforeach
+	</tbody>
+</table>
 @endsection

@@ -12,11 +12,13 @@
 
 @section('page.head.menu')
     <div class="ui secondary menu">
-    	<div class="right item">
-	        <a class="ui labeled item" href="{{ route('menu.create') }}">
-	            <i class="sitemap icon"></i>Add Menu
-	        </a>
-	    </div>
+        <a class="item" href="{{ route('menu.create') }}">
+            <i class="cubes icon"></i>Add Menu
+        </a>
+
+        <a class="item" href="{{ route('menu.item.create') }}">
+            <i class="cube icon"></i>Add Menu Item
+        </a>
     </div>
 @endsection
 
@@ -34,7 +36,7 @@
 		@foreach($menus as $menu)
 			<tr>
 				<td class="collapsing">{{ $menu->id }}</td>
-				<td class="collapsing">{{ $menu->key }}</td>
+				<td class="collapsing"><a href="{{ route('menu.show', $menu) }}">{{$menu->key}}</a></td>
 				<td>{{ $menu->title }}</td>
 				<td class="right aligned collapsing">
 					<div class="ui compact text menu">
