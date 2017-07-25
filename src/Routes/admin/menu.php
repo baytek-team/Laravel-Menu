@@ -1,5 +1,7 @@
 <?php
 
+use Baytek\Laravel\Content\Models\Content;
+
 // Add the default route to the routes list for this provider
 $router->resource('menu', 'MenuController');
 
