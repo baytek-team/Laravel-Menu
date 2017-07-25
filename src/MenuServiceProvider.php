@@ -42,13 +42,18 @@ class MenuServiceProvider extends AuthServiceProvider
             __DIR__.'/../views' => resource_path('views/vendor/menu'),
         ], 'views');
 
+        // Publish routes to the App
+        $this->publishes([
+            __DIR__.'/../src/Routes' => base_path('routes'),
+        ], 'routes');
+
         $this->publishes([
             __DIR__.'/../config/menu.php' => config_path('menu.php'),
         ], 'config');
 
         $this->bootBladeDirectives();
 
-        $this->bootRoutes();
+        // $this->bootRoutes();
     }
 
     /**
@@ -79,6 +84,8 @@ class MenuServiceProvider extends AuthServiceProvider
 
             return new Link();
         });
+
+        $this->app->register(RouteServiceProvider::class);
     }
 
     public function provides()
@@ -89,31 +96,6 @@ class MenuServiceProvider extends AuthServiceProvider
             Button::class,
             Link::class,
         ];
-    }
-
-    public function bootRoutes()
-    {
-        Route::group([
-                'namespace' => \Baytek\Laravel\Menu\Controllers::class,
-                'middleware' => ['web'],
-            ], function ($router) {
-
-                // Add the default route to the routes list for this provider
-                $router->resource('admin/menu', 'MenuController');
-
-                $router->bind('menu', function ($slug) {
-
-                    // Try to find the page with the slug, this should also check its parents and should also split on /
-                    $menu = Content::ofContentType('menu')->where('contents.key', $slug)->first();
-
-                    // Show the 404 page if not found
-                    if (is_null($menu)) {
-                        abort(404);
-                    }
-
-                    return $menu;
-                });
-            });
     }
 
     public function bootBladeDirectives()

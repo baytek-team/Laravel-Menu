@@ -15,5 +15,8 @@ return [
 		'class' => 'item',
 		'prepend' => '',
 		'wrapper' => 'div',
+	],
+	'routes' => [
+		'enabled' => true
 	]
 ];
