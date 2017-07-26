@@ -52,8 +52,6 @@ class MenuServiceProvider extends AuthServiceProvider
         ], 'config');
 
         $this->bootBladeDirectives();
-
-        // $this->bootRoutes();
     }
 
     /**
