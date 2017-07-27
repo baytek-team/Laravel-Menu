@@ -1,6 +1,8 @@
 <?php
 namespace Baytek\Laravel\Menu\Seeders;
 
+use Baytek\Laravel\Menu\Models\Menu;
+use Baytek\Laravel\Menu\Models\MenuItem;
 use Baytek\Laravel\Content\Seeder;
 
 class MenuSeeder extends Seeder
@@ -16,7 +18,20 @@ class MenuSeeder extends Seeder
             [
                 'key' => 'menu',
                 'title' => 'Menu',
-                'content' => 'Menu Content Type',
+                'content' => Menu::class,
+                'relations' => [
+                    ['parent-id', 'content-type']
+                ],
+                'meta' => [
+                    'class' => 'ui menu',
+                    'prepend' => '<div class="ui container inverted">',
+                    'append' => '</div>',
+                ]
+            ],
+            [
+                'key' => 'menu-item',
+                'title' => 'Menu Item',
+                'content' => MenuItem::class,
                 'relations' => [
                     ['parent-id', 'content-type']
                 ],
@@ -31,7 +46,8 @@ class MenuSeeder extends Seeder
                 'title' => 'Primary Navigation Menu',
                 'content' => 'Main site navigation.',
                 'relations' => [
-                    ['content-type', 'menu']
+                    ['content-type', 'menu'],
+                    ['parent-id', 'menu'],
                 ]
             ]
         ]);

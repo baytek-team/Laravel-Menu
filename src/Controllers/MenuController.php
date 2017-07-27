@@ -4,9 +4,7 @@ namespace Baytek\Laravel\Menu\Controllers;
 
 use Baytek\Laravel\Content\Controllers\ContentController;
 use Baytek\Laravel\Content\Controllers\Controller;
-// use Baytek\Laravel\Content\Models\Content;
-// use Baytek\Laravel\Content\Models\ContentMeta;
-// use Baytek\Laravel\Content\Models\ContentRelation;
+use Baytek\Laravel\Content\Models\Content;
 use Baytek\Laravel\Menu\Models\Menu;
 
 use Illuminate\Http\Request;
@@ -30,10 +28,10 @@ class MenuController extends ContentController
      * @var [type]
      */
     protected $views = [
-        'index' => 'index',
-        'create' => 'create',
-        'edit' => 'edit',
-        'show' => 'index',
+        'index' => 'menu.index',
+        'create' => 'menu.create',
+        'edit' => 'menu.edit',
+        'show' => 'menu.index',
     ];
 
     /**
@@ -44,7 +42,7 @@ class MenuController extends ContentController
     public function index()
     {
         $this->viewData['index'] = [
-            'menus' => Menu::ofContentType('menu')->get(),
+            'menus' => Menu::childrenOf('menu')->get(),
         ];
 
         return parent::contentIndex();
@@ -96,9 +94,15 @@ class MenuController extends ContentController
         return parent::contentEdit($menu);
     }
 
+    /**
+     * Show the form for creating a new menu.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function show(Menu $menu)
     {
         $this->viewData['show'] = [
+            'menu' => $menu,
             'menus' => Menu::childrenOf($menu)->get(),
         ];
 

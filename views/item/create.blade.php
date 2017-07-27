@@ -13,10 +13,10 @@
 @section('content')
     <div class="flex-center position-ref full-height">
         <div class="content">
-            <form action="{{route('menu.store')}}" method="POST" class="ui form">
+            <form action="{{route('menu.item.store', $menu)}}" method="POST" class="ui form">
                 {{ csrf_field() }}
 
-                @include('menu::form')
+                @include('menus::item.form')
 
                 <div class="field actions">
     	            <a class="ui button" href="{{ route('menu.index') }}">Cancel</a>

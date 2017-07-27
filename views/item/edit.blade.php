@@ -14,11 +14,11 @@
 
 <div id="registration" class="ui container">
     <div class="ui hidden divider"></div>
-    <form action="{{ route('menu.update', $menu) }}" method="POST" class="ui form">
+    <form action="{{ route('menu.item.update', $menu) }}" method="POST" class="ui form">
         {{ csrf_field() }}
         {{ method_field('PUT') }}
 
-        @include('menu::form')
+        @include('menus::item.form')
         <div class="ui hidden divider"></div>
         <div class="ui hidden divider"></div>
 

@@ -4,10 +4,9 @@ namespace Baytek\Laravel\Menu\Controllers;
 
 use Baytek\Laravel\Content\Controllers\ContentController;
 use Baytek\Laravel\Content\Controllers\Controller;
-// use Baytek\Laravel\Content\Models\Content;
-// use Baytek\Laravel\Content\Models\ContentMeta;
-// use Baytek\Laravel\Content\Models\ContentRelation;
+use Baytek\Laravel\Content\Models\Content;
 use Baytek\Laravel\Menu\Models\Menu;
+use Baytek\Laravel\Menu\Models\MenuItem;
 
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -23,17 +22,23 @@ class MenuItemController extends ContentController
      *
      * @var Baytek\Laravel\Content\Types\Webpage\Webpage
      */
-    protected $model = Menu::class;
+    protected $model = MenuItem::class;
+
+    /**
+     * View namespace used to load models
+     * @var String
+     */
+    protected $viewNamespace = 'menus';
 
     /**
      * List of views this content type uses
-     * @var [type]
+     * @var Array
      */
     protected $views = [
-        'index' => 'index',
-        'create' => 'create',
-        'edit' => 'edit',
-        'show' => 'index',
+        'index' => 'item.index',
+        'create' => 'item.create',
+        'edit' => 'item.edit',
+        'show' => 'item.index',
     ];
 
     /**
@@ -41,24 +46,26 @@ class MenuItemController extends ContentController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        $this->viewData['index'] = [
-            'menus' => Menu::ofContentType('menu')->get(),
-        ];
-
-        return parent::contentIndex();
-    }
+    // public function index(Menu $menu)
+    // {
+    //     $this->viewData['index'] = [
+    //         'menu' => $menu,
+    //         'menus' => Content::childrenOf('menu')->get(),
+    //     ];
+    //     return parent::contentIndex();
+    // }
 
     /**
      * Show the form for creating a new menu.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Menu $menu)
     {
         $this->viewData['create'] = [
-            'parents' => Menu::ofContentType('menu')->get(),
+            'menu' => $menu,
+            'item' => new Menu,
+            'parents' => Content::childrenOf('menu')->get(),
         ];
 
         return parent::contentCreate();
@@ -70,16 +77,23 @@ class MenuItemController extends ContentController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Menu $menu)
     {
         $this->redirects = false;
 
-        $request->merge(['key' => str_slug($request->title)]);
+        $request->merge([
+            'key' => str_slug($request->title)
+        ]);
 
-        $menu = parent::contentStore($request);
-        $menu->saveRelation('parent-id', $request->parent_id);
+        $item = parent::contentStore($request);
+        $item->saveRelations([
+            'content-type' => content_id('menu-item'),
+            'parent-id' => $menu->id,
+        ]);
 
-        return redirect(route($this->names['singular'].'.show', $menu));
+        $item->saveMetadatas(array_filter($request->except(['_token', 'content', 'title'])));
+
+        return redirect(route('menu.item.show', [$menu, $item]));
     }
 
     /**
@@ -90,6 +104,8 @@ class MenuItemController extends ContentController
     public function edit(Menu $menu)
     {
         $this->viewData['edit'] = [
+            'menu' => $menu,
+            'item' => new Menu,
             'parents' => Menu::childrenOf('menu')->get(),
         ];
 
@@ -99,6 +115,7 @@ class MenuItemController extends ContentController
     public function show(Menu $menu)
     {
         $this->viewData['show'] = [
+            'menu' => $menu,
             'menus' => Menu::childrenOf($menu)->get(),
         ];
 

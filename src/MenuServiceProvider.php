@@ -36,10 +36,10 @@ class MenuServiceProvider extends AuthServiceProvider
      */
     public function boot()
     {
-        $this->loadViewsFrom(__DIR__.'/../views', 'menu');
+        $this->loadViewsFrom(__DIR__.'/../views', 'menus');
 
         $this->publishes([
-            __DIR__.'/../views' => resource_path('views/vendor/menu'),
+            __DIR__.'/../views' => resource_path('views/vendor/menus'),
         ], 'views');
 
         // Publish routes to the App

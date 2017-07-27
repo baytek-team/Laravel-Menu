@@ -6,7 +6,7 @@ use Baytek\Laravel\Menu\Models\Menu;
 Route::resource('menu', 'MenuController');
 
 Route::group(['as' => 'menu.'], function () {
-	Route::resource('menu/item', 'MenuItemController');
+	Route::resource('menu/{menu}/item', 'MenuItemController');
 });
 
 Route::bind('menu', function ($slug) {
