@@ -39,9 +39,10 @@ class MenuController extends ContentController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Menu $parent = null)
     {
         $this->viewData['index'] = [
+            'parent' => $parent,
             'menus' => Menu::childrenOf('menu')->get(),
         ];
 
@@ -53,10 +54,11 @@ class MenuController extends ContentController
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Menu $parent = null)
     {
         $this->viewData['create'] = [
-            'parents' => Menu::ofContentType('menu')->get(),
+            'parent' => $parent,
+            'parents' => Menu::childrenOf('menu')->get(),
         ];
 
         return parent::contentCreate();
@@ -85,13 +87,14 @@ class MenuController extends ContentController
      *
      * @return \Illuminate\Http\Response
      */
-    public function edit(Menu $menu)
+    public function edit(Menu $parent)
     {
         $this->viewData['edit'] = [
-            'parents' => Menu::childrenOf('menu')->get(),
+            'parent' => $parent,
+            'parents' => Menu::childrenOf($parent->parent())->get(),
         ];
 
-        return parent::contentEdit($menu);
+        return parent::contentEdit($parent);
     }
 
     /**

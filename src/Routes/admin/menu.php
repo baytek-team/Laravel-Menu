@@ -4,6 +4,7 @@ use Baytek\Laravel\Menu\Models\Menu;
 
 // Add the default route to the routes list for this provider
 Route::resource('menu', 'MenuController');
+Route::get('menu/{menu}/create', 'MenuController@create');
 
 Route::group(['as' => 'menu.'], function () {
 	Route::resource('menu/{menu}/item', 'MenuItemController');

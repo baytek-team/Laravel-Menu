@@ -7,10 +7,10 @@ use Illuminate\Foundation\Support\Providers\AuthServiceProvider;
 
 use Blade;
 use Route;
+use View;
 
 class MenuServiceProvider extends AuthServiceProvider
 {
-
     protected $defer = true;
 
     /**
@@ -51,6 +51,11 @@ class MenuServiceProvider extends AuthServiceProvider
             __DIR__.'/../config/menu.php' => config_path('menu.php'),
         ], 'config');
 
+        // Attach a composer to the admin blade
+        View::composer(
+            'contents::admin', ViewComposers\MenuComposer::class
+        );
+
         $this->bootBladeDirectives();
     }
 
@@ -64,22 +69,18 @@ class MenuServiceProvider extends AuthServiceProvider
         $this->commands($this->commands);
 
         $this->app->bind(Menu::class, function ($app) {
-
             return new Menu();
         });
 
         $this->app->bind(Anchor::class, function ($app) {
-
             return new Anchor();
         });
 
         $this->app->bind(Button::class, function ($app) {
-
             return new Button();
         });
 
         $this->app->bind(Link::class, function ($app) {
-
             return new Link();
         });
 
@@ -114,7 +115,6 @@ class MenuServiceProvider extends AuthServiceProvider
         });
 
         Blade::extend(function ($value) {
-
             return preg_replace(
                 // Expression
                 '/(.*?)@clink(\((.*?)\))?(.*?)@endclink?(.*?)/s',
@@ -126,7 +126,6 @@ class MenuServiceProvider extends AuthServiceProvider
         });
 
         Blade::extend(function ($value) {
-
             return preg_replace(
                 // Expression
                 '/(.*?)@menu(\((.*?)\))?(.*?)@endmenu?(.*?)/s',
@@ -138,7 +137,6 @@ class MenuServiceProvider extends AuthServiceProvider
         });
 
         Blade::extend(function ($value) {
-
             return preg_replace(
                 // Expression
                 '/(.*?)@ifBreadcrumbs?(.*?)/s',
@@ -150,7 +148,6 @@ class MenuServiceProvider extends AuthServiceProvider
         });
 
         Blade::extend(function ($value) {
-
             return preg_replace(
                 // Expression
                 '/(.*?)@endBreadcrumbs?(.*?)/s',

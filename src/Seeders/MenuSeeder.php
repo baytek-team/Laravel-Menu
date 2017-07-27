@@ -42,12 +42,33 @@ class MenuSeeder extends Seeder
                 ]
             ],
             [
-                'key' => 'primary-navigation-menu',
-                'title' => 'Primary Navigation Menu',
-                'content' => 'Main site navigation.',
+                'key' => 'admin-menu',
+                'title' => 'Administration Navigation Menu',
+                'content' => '',
                 'relations' => [
                     ['content-type', 'menu'],
                     ['parent-id', 'menu'],
+                ]
+            ],
+            [
+                'key' => 'webpage-menu',
+                'title' => 'Webpage Navigation Menu',
+                'content' => '',
+                'relations' => [
+                    ['content-type', 'menu'],
+                    ['parent-id', 'admin-menu'],
+                ]
+            ],
+            [
+                'key' => 'webpage-menu',
+                'title' => 'Webpage Navigation Menu',
+                'content' => '',
+                'meta' => [
+
+                ],
+                'relations' => [
+                    ['content-type', 'menu'],
+                    ['parent-id', 'admin-menu'],
                 ]
             ]
         ]);
