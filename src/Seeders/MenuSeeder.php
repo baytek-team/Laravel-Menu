@@ -49,27 +49,6 @@ class MenuSeeder extends Seeder
                     ['content-type', 'menu'],
                     ['parent-id', 'menu'],
                 ]
-            ],
-            [
-                'key' => 'webpage-menu',
-                'title' => 'Webpage Navigation Menu',
-                'content' => '',
-                'relations' => [
-                    ['content-type', 'menu'],
-                    ['parent-id', 'admin-menu'],
-                ]
-            ],
-            [
-                'key' => 'webpage-menu',
-                'title' => 'Webpage Navigation Menu',
-                'content' => '',
-                'meta' => [
-
-                ],
-                'relations' => [
-                    ['content-type', 'menu'],
-                    ['parent-id', 'admin-menu'],
-                ]
             ]
         ]);
     }

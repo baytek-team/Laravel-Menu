@@ -4,6 +4,8 @@ namespace Baytek\Laravel\Menu\ViewComposers;
 
 use Illuminate\View\View;
 use Baytek\Laravel\Menu\Models\Menu;
+use Baytek\Laravel\Menu\Models\MenuItem;
+use Baytek\Laravel\Content\Models\Content;
 
 class MenuComposer
 {
@@ -34,7 +36,13 @@ class MenuComposer
      */
     public function compose(View $view)
     {
-        // dd(Menu::descendentsOfType(content_id('admin-menu'), 'menu'));
-        // $view->with('menu', Menu::descendentsOfType(content_id('admin-menu'), 'menu')->get());
+        $menus = Menu::childrenOfType(content_id('admin-menu'), 'menu')->get();
+
+        foreach($menus as &$menu) {
+            $menu->items = MenuItem::childrenOf($menu->id)->withMeta()->withContents()->get();
+        }
+
+        // Menu::childrenOfType(content_id('admin-menu'), 'menu')->get()->pluck('id');
+        $view->with('menu', $menus);
     }
 }
