@@ -91,7 +91,7 @@ class MenuItemController extends ContentController
             'parent-id' => $menu->id,
         ]);
 
-        $item->saveMetadatas(array_filter($request->except(['_token', 'content', 'title'])));
+        $item->saveMetadata(array_filter($request->except(['_token', 'content', 'title'])));
 
         return redirect(route('menu.item.show', [$menu, $item]));
     }
