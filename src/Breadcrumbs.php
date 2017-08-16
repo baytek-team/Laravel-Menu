@@ -28,6 +28,7 @@ class Breadcrumbs
 	    $path = '/';
 
 	    foreach($folders as $index => $folder) {
+	    	$folder = str_replace('?', '', $folder);
 	        $name = title_case($folder);
 	        $parameters = Route::getCurrentRoute()->parameters();
 

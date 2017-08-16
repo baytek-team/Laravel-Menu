@@ -61,6 +61,6 @@ class MenuInstaller extends Installer
             'primary-navigation-menu',
         ];
 
-        return Content::whereIn('key', $relevantRecords)->count() === 0;
+        return Content::whereIn('contents.key', $relevantRecords)->count() === 0;
     }
 }
