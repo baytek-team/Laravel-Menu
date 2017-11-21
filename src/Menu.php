@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Collection;
 
 use Request;
 
+use Exceptions\InvalidPropertyException;
+
 /*
     The menu class needs to accomplish the following.
     * Needs to be open, and easy to manipulate insert items at any index, remove items, reorder items
@@ -31,28 +33,33 @@ class Menu extends Collection
     private $before = '';
     private $after = '';
 
+    /**
+     * Constructor
+     *
+     * @param array $value      List of items
+     * @param array $properties [description]
+     */
     function __construct(array $value = [], array $properties = [])
     {
         parent::__construct($value);
 
         $this->wrapper = config('menu.wrapper', 'div');
-        $this->class = config('menu.class', '');
+        $this->class   = config('menu.class', '');
         $this->prepend = config('menu.prepend', '');
-        $this->append = config('menu.append', '');
-        $this->before = config('menu.before', '');
-        $this->after = config('menu.after', '');
+        $this->append  = config('menu.append', '');
+        $this->before  = config('menu.before', '');
+        $this->after   = config('menu.after', '');
 
         // This is a sort of hack because the way the blade templates are setup.
         //
         // I would like to review this code and come up with a better solution.
-        if(count($properties) == 1 && $properties[0]) {
+        if (count($properties) == 1 && $properties[0]) {
             $properties = $properties[0];
         }
 
-        collect($properties)->each(function ($value, $property)
-        {
-            if(!property_exists($this, $property)) {
-                throw new Exception("Setting invalid property '$property'");
+        collect($properties)->each(function ($value, $property) {
+            if (!property_exists($this, $property)) {
+                throw new InvalidPropertyException($property);
             }
 
             // This could be better using magic setter
@@ -62,6 +69,7 @@ class Menu extends Collection
 
     /**
      * Create an anchor menu item
+     *
      * @param  string $text             Link text
      * @param  array  $properties       List of properties of the link
      * @return \Baytek\Menu\Item        Item Object
@@ -73,6 +81,7 @@ class Menu extends Collection
 
     /**
      * Create an button menu item
+     *
      * @param  string $text             Button text
      * @param  array  $properties       List of properties of the link
      * @return \Baytek\Menu\Item        Item Object
@@ -84,6 +93,7 @@ class Menu extends Collection
 
     /**
      * Create an link menu item
+     *
      * @param  string $text             Link text
      * @param  array  $properties       List of properties of the link
      * @return \Baytek\Menu\Item        Item Object
@@ -95,16 +105,17 @@ class Menu extends Collection
 
     /**
      * Render the collection of Menu Items to an HTML list
+     *
      * @return string            HTML markup list
      */
     public function toNav()
     {
-        $menu = $this->map(function($link)
-        {
+        $menu = $this->map(function ($link) {
             return (string)$link;
         })->implode('');
 
-        return sprintf('%1$s<%2$s%3$s>%4$s%5$s%6$s</%2$s>%7$s',
+        return sprintf(
+            '%1$s<%2$s%3$s>%4$s%5$s%6$s</%2$s>%7$s',
             $this->prepend ?: null,
             $this->wrapper,
             $this->getAttributes(),
