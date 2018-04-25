@@ -18,6 +18,13 @@
         "laravel/framework": "5.5.*",
         "baytek/laravel-content": "1.2.*"
     },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Baytek\\Laravel\\Menu\\MenuServiceProvider"
+            ]
+        }
+    },
     "post-install-cmd": [
         "php artisan install:menu"
     ],
