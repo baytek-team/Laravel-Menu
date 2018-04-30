@@ -11,7 +11,7 @@ use View;
 
 class MenuServiceProvider extends AuthServiceProvider
 {
-    protected $defer = true;
+    protected $defer = false;
 
     /**
      * List of permission policies used by this package
@@ -53,7 +53,8 @@ class MenuServiceProvider extends AuthServiceProvider
 
         // Attach a composer to the admin blade
         View::composer(
-            'contents::admin', ViewComposers\MenuComposer::class
+            'contents::admin',
+            ViewComposers\MenuComposer::class
         );
 
         $this->bootBladeDirectives();
