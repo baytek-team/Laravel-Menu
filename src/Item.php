@@ -72,6 +72,7 @@ class Item
     public function __toString()
     {
         $isConfirmation = false;
+        $result = '';
 
         try {
             if (strtolower($this->method) == 'delete' || !empty($this->confirm)) {
@@ -90,8 +91,15 @@ class Item
                 $this->form
             );
         } catch (Exception $e) {
-            dump($this);
-            dd($e);
+            \Log::warning('There was an error rendering a link', [$this->text, $this->method, $this->uniqid]);
+
+            if(config('app.env') !== 'production') {
+                $result = '<div style="color: red;">Cannot render link</div>';
+            }
+
+            if(config('app.debug')) {
+                dump($this);
+            }
         }
 
         return $result;

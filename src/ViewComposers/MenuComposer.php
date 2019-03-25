@@ -41,7 +41,6 @@ class MenuComposer
         foreach($menus as &$menu) {
             $menu->items = MenuItem::childrenOf($menu->id)->withMeta()->withContents()->get();
         }
-
         // Menu::childrenOfType(content_id('admin-menu'), 'menu')->get()->pluck('id');
         $view->with('menu', $menus);
     }
