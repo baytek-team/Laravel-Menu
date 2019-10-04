@@ -2,7 +2,7 @@
 
 namespace Baytek\Laravel\Menu;
 
-use Baytek\Laravel\Content\Models\Content;
+//use Baytek\Laravel\Content\Models\Content;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider;
 
 use Blade;
@@ -36,26 +36,26 @@ class MenuServiceProvider extends AuthServiceProvider
      */
     public function boot()
     {
-        $this->loadViewsFrom(__DIR__.'/../views', 'menus');
+        //$this->loadViewsFrom(__DIR__.'/../views', 'menus');
 
-        $this->publishes([
-            __DIR__.'/../views' => resource_path('views/vendor/menus'),
-        ], 'views');
+        // $this->publishes([
+        //     __DIR__.'/../views' => resource_path('views/vendor/menus'),
+        // ], 'views');
 
         // Publish routes to the App
-        $this->publishes([
-            __DIR__.'/../src/Routes' => base_path('routes'),
-        ], 'routes');
+        // $this->publishes([
+        //     __DIR__.'/../src/Routes' => base_path('routes'),
+        // ], 'routes');
 
-        $this->publishes([
-            __DIR__.'/../config/menu.php' => config_path('menu.php'),
-        ], 'config');
+        // $this->publishes([
+        //     __DIR__.'/../config/menu.php' => config_path('menu.php'),
+        // ], 'config');
 
         // Attach a composer to the admin blade
-        View::composer(
-            'contents::admin',
-            ViewComposers\MenuComposer::class
-        );
+        // View::composer(
+        //     'contents::admin',
+        //     ViewComposers\MenuComposer::class
+        // );
 
         $this->bootBladeDirectives();
     }
@@ -67,7 +67,7 @@ class MenuServiceProvider extends AuthServiceProvider
      */
     public function register()
     {
-        $this->commands($this->commands);
+        //$this->commands($this->commands);
 
         $this->app->bind(Menu::class, function ($app) {
             return new Menu();
@@ -85,7 +85,7 @@ class MenuServiceProvider extends AuthServiceProvider
             return new Link();
         });
 
-        $this->app->register(RouteServiceProvider::class);
+        //$this->app->register(RouteServiceProvider::class);
     }
 
     public function provides()
