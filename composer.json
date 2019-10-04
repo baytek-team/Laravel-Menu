@@ -25,8 +25,5 @@
             ]
         }
     },
-    "post-install-cmd": [
-        "php artisan install:menu"
-    ],
     "minimum-stability": "dev"
 }
