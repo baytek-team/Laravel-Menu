@@ -12,6 +12,8 @@ use Spatie\Permission\Models\Permission;
 use Artisan;
 use DB;
 
+use Illuminate\Support\Str;
+
 class MenuInstaller extends Installer
 {
     public $name = 'Menu';
@@ -43,7 +45,7 @@ class MenuInstaller extends Installer
         foreach(['view', 'create', 'update', 'delete'] as $permission) {
 
             // If the permission exists in any form do not reseed.
-            if(Permission::where('name', title_case($permission.' '.$this->name))->exists()) {
+            if(Permission::where('name', Str::title($permission.' '.$this->name))->exists()) {
                 return false;
             }
         }

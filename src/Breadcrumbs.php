@@ -12,6 +12,8 @@ use Blade;
 use Exception;
 use Route;
 
+use Illuminate\Support\Str;
+
 class Breadcrumbs
 {
 	protected $crumbs = [];
@@ -28,7 +30,8 @@ class Breadcrumbs
 	    $path = '/';
 
 	    foreach($folders as $index => $folder) {
-	        $name = title_case($folder);
+	        $name = Str::title($folder);
+
 	        $parameters = Route::getCurrentRoute()->parameters();
 
 	        foreach($parameters as $key => $value) {
