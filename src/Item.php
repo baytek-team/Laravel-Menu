@@ -114,7 +114,7 @@ class Item
 
 	public function getLocation()
 	{
-		return starts_with($this->location, '#') ?
+		return substr($this->location, 0, 1) == '#' ?
 			$this->location :
 			call_user_func_array($this->type, array_filter([
 				$this->location,
