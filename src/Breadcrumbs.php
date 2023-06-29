@@ -40,6 +40,11 @@ class Breadcrumbs
 	                if(is_object($value) && $value instanceof Model) {
 	                	$name = $value->title;
 	                	$folder = $value->id;
+
+	                	//Handle users
+	                	if ($value->name) {
+	                		$name = $value->name;
+	                	}
 	                }
 	                else if(is_object($value) && $value instanceof Collection) {
 	                	dd($content);
